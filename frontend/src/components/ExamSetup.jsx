@@ -3,7 +3,7 @@ import "./ExamSetup.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-export default function ExamSetup({ onStart }) {
+export default function ExamSetup({ onStart, user, onLogout }) {
   const [form, setForm] = useState({
     studentName: "",
     examName: "Data Structures & Algorithms",

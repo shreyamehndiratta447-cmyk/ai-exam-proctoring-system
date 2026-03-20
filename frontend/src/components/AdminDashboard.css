@@ -1,0 +1,105 @@
+.admin-page { min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+
+.admin-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px; background: var(--surface);
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+}
+.admin-title { font-size: 18px; font-weight: 800; color: #fff; }
+.admin-user  { display: flex; align-items: center; gap: 12px; }
+.logout-btn  { padding: 8px 16px; font-size: 13px; }
+
+.admin-body { flex: 1; padding: 28px; display: flex; flex-direction: column; gap: 24px; }
+
+/* Stats Row */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-box {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+}
+.sb-icon  { font-size: 28px; }
+.sb-value { font-size: 28px; font-weight: 900; }
+.sb-label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
+.stat-blue   .sb-value { color: var(--accent); }
+.stat-green  .sb-value { color: var(--green); }
+.stat-red    .sb-value { color: var(--red); }
+.stat-purple .sb-value { color: var(--accent3); }
+
+/* Tabs */
+.admin-tabs { display: flex; align-items: center; gap: 8px; }
+.tab-btn {
+  padding: 10px 20px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text-dim); font-size: 14px; font-weight: 700;
+  font-family: 'Syne', sans-serif; cursor: pointer; transition: all 0.2s;
+}
+.tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.08); }
+.refresh-btn { margin-left: auto; }
+
+/* Loading */
+.loading-box { display: flex; align-items: center; gap: 12px; padding: 40px; color: var(--text-dim); }
+
+/* Admin Grid */
+.admin-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+
+/* Sessions List */
+.sessions-list, .students-table {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+}
+.list-header {
+  display: grid; gap: 16px; padding: 14px 20px;
+  background: var(--surface2); border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.sessions-list .list-header { grid-template-columns: 1fr 1.5fr 80px 100px 90px; }
+.students-table .list-header { grid-template-columns: 1fr 1.5fr 100px 100px 100px; }
+
+.session-row, .student-row {
+  display: grid; gap: 16px; padding: 14px 20px;
+  border-bottom: 1px solid var(--border); font-size: 13px;
+  align-items: center; transition: background 0.15s;
+}
+.sessions-list .session-row { grid-template-columns: 1fr 1.5fr 80px 100px 90px; cursor: pointer; }
+.students-table .student-row { grid-template-columns: 1fr 1.5fr 100px 100px 100px; }
+.session-row:hover { background: var(--surface2); }
+.session-row.selected { background: rgba(0,229,255,0.05); border-left: 2px solid var(--accent); }
+.session-row:last-child, .student-row:last-child { border-bottom: none; }
+
+.sr-name  { font-weight: 700; color: #fff; }
+.sr-exam  { color: var(--text-dim); font-size: 12px; }
+.sr-score { font-weight: 900; font-size: 16px; }
+.sr-viols { color: var(--text-dim); }
+.sr-email { color: var(--text-dim); font-size: 12px; }
+.sr-exams { color: var(--accent); font-weight: 700; }
+.sr-date  { color: var(--text-dim); font-size: 11px; }
+
+.score-green  { color: var(--green) !important; }
+.score-yellow { color: var(--yellow) !important; }
+.score-red    { color: var(--red) !important; }
+
+/* Violation Detail */
+.violation-detail {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow-y: auto; max-height: 600px;
+  display: flex; flex-direction: column;
+}
+.vd-title {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 700; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 0.07em; position: sticky; top: 0;
+  background: var(--surface2);
+}
+.vd-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 12px;
+}
+.vd-high   { background: rgba(255,61,113,0.04); }
+.vd-medium { background: rgba(255,209,102,0.03); }
+.vd-time   { color: var(--text-dim); flex-shrink: 0; width: 75px; }
+.vd-msg    { color: var(--text); flex: 1; }
+
+.empty-state { padding: 40px; text-align: center; color: var(--text-dim); font-size: 14px; }
+
+.admin-content { flex: 1; }
