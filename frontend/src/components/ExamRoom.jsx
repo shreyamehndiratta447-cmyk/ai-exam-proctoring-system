@@ -43,29 +43,44 @@ export default function ExamRoom({ sessionData, onEnd }) {
 
   // ── End exam ──────────────────────────────────────────────────────
   const handleEndExam = useCallback(async () => {
+    // Stop intervals first
     clearInterval(intervalRef.current);
     clearInterval(audioIntervalRef.current);
-    streamRef.current?.getTracks().forEach((t) => t.stop());
+
+    // Stop camera
+    if (videoRef.current && videoRef.current.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach(t => t.stop());
+      videoRef.current.srcObject = null;
+    }
+
+    // Get report then navigate
+    let reportData = {
+      student_name: sessionData.studentName,
+      exam_name: sessionData.examName,
+      violations: violations,
+      tab_switches: tabSwitches,
+      integrity_score: Math.max(0, 100 - violations.length * 3),
+      head_times: {},
+      answers,
+    };
+
     try {
       const res = await fetch(`${API}/api/session/end`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionData.sessionId }),
       });
-      const data = await res.json();
-      onEnd({ ...data.report, answers, tabSwitches });
-    } catch {
-      onEnd({
-        student_name: sessionData.studentName,
-        exam_name: sessionData.examName,
-        violations: violations,
-        tab_switches: tabSwitches,
-        integrity_score: 70,
-        answers,
-      });
+      if (res.ok) {
+        const data = await res.json();
+        reportData = { ...data.report, answers, tabSwitches };
+      }
+    } catch (err) {
+      console.error("Session end error:", err);
     }
-  }, [sessionData, answers, tabSwitches, violations, onEnd]);
 
+    // Always navigate to report
+    onEnd(reportData);
+  }, [sessionData, answers, tabSwitches, violations, onEnd]);
   // ── Audio monitor ──────────────────────────────────────────────────
   const setupAudio = useCallback((stream) => {
     const ctx = new AudioContext();
@@ -80,9 +95,10 @@ export default function ExamRoom({ sessionData, onEnd }) {
       const data = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(data);
       const avg = data.reduce((a, b) => a + b, 0) / data.length;
-      const normalized = avg / 128;
+      const normalized = avg / 64;
+      console.log("Audio level:", normalized);
       setAudioLevel(normalized);
-      if (normalized > 0.7) {
+      if (normalized > 0.3) {
         fetch(`${API}/api/event/audio`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -135,9 +151,10 @@ export default function ExamRoom({ sessionData, onEnd }) {
           videoRef.current.onloadedmetadata = () => setCameraReady(true);
         }
         setupAudio(stream);
-      } catch  {
-        addAlert("Camera access denied. Cannot proceed.", "HIGH");
-      }
+     } catch (err) {
+  console.error("Camera/mic error:", err);
+  addAlert("Camera access denied. Cannot proceed.", "HIGH");
+}
     })();
     return () => {
       streamRef.current?.getTracks().forEach((t) => t.stop());

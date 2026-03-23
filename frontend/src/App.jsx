@@ -45,8 +45,13 @@ export default function App() {
   };
 
   const handleEnd = (reportData) => {
-    setReport(reportData);
-    setPhase("report");
+    console.log("Report data received:", reportData);
+    if (reportData) {
+      setReport(reportData);
+      setPhase("report");
+    } else {
+      setPhase("setup");
+    }
   };
 
   const handleRestart = () => {

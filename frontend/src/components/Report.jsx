@@ -1,12 +1,7 @@
 import "./Report.css";
-
 export default function Report({ report, onRestart }) {
+  
   const score = report?.integrity_score ?? 0;
-  const getScoreLabel = (s) => {
-    if (s >= 85) return { label: "Excellent", color: "green" };
-    if (s >= 65) return { label: "Moderate", color: "yellow" };
-    return { label: "Suspicious", color: "red" };
-  };
 
   const { label, color } = getScoreLabel(score);
 
